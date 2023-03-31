@@ -10,7 +10,6 @@ function CreateProject({}: Props) {
   const [formDisplay, setDisplay] = useState(true);
   const projectTitle = useRef<HTMLInputElement>(null);
   const { data: session } = useSession();
-  console.log(session);
 
   const submitProject = async (e: any) => {
     e.preventDefault();

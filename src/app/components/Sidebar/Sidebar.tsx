@@ -17,7 +17,7 @@ const getUserBoards = async (id: string) => {
         boards: true,
       },
     });
-    if (!boards) return null;
+    if (!boards) throw new Error(`Could not retrieve boards`);
     return boards;
   } catch (err) {
     throw new Error(`Error getting your boards: ${err}`);
@@ -35,7 +35,8 @@ async function Sidebar({}: Props) {
       <h1 className=" font-normal text-2xl">Boards</h1>
       <hr className=" border-slate-800 w-full" />
       <CreateProject />
-      <BoardList boards={boards} />
+      {!boards ? "You don't have any projects." : <BoardList boards={boards} />}
+      {/* <BoardList boards={boards} /> */}
     </section>
   );
 }
