@@ -7,7 +7,8 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "docker-dev": "docker-compose -f docker-compose-dev.yml up"
+    "docker-dev": "docker-compose -f docker-compose-dev.yml up",
+    "docker-rb": "docker-compose -f docker-compose-dev.yml up --build --force-recreate"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -19,16 +20,18 @@
     "@prisma/client": "^4.12.0",
     "@types/node": "18.15.8",
     "@types/react": "18.0.29",
+    "@types/react-beautiful-dnd": "^13.1.4",
     "@types/react-dom": "18.0.11",
-    "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "next": "13.2.4",
     "next-auth": "^4.20.1",
     "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
     "swr": "^2.1.1",
     "typescript": "5.0.2",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",

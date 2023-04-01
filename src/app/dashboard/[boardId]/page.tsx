@@ -21,8 +21,8 @@ async function BoardPage({ params }: any) {
   const board = await getBoardData(params.boardId);
   const { title } = board;
   return (
-    <main className="grow flex flex-col">
-      <nav className="flex justify-between items-center p-4 pl-6 pr-6">
+    <main className="grow flex flex-col p-3">
+      <nav className="flex justify-between items-center pl-6 pr-6">
         <h1 className="text-3xl">{title}</h1>
         <Link
           href={`/settings/${params.boardId}`}
@@ -31,6 +31,7 @@ async function BoardPage({ params }: any) {
           Settings
         </Link>
       </nav>
+      <hr className="border border-neutral-300 m-2" />
       <Board board={board} />
     </main>
   );

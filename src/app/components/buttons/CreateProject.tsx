@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 type Props = {};
 
 function CreateProject({}: Props) {
-  const [formDisplay, setDisplay] = useState(true);
+  const [formDisplay, setDisplay] = useState(false);
   const projectTitle = useRef<HTMLInputElement>(null);
   const { data: session } = useSession();
 
