@@ -8,6 +8,7 @@ import { reorderCards, reorderColumns } from './reorder';
 import { io } from 'socket.io-client';
 
 const PORT = process.env.SOCKETIO_URL;
+const socket = io('http://localhost:3500');
 
 type ColumnType = {
   id: string;
@@ -19,6 +20,9 @@ function Board({ board }: any) {
   const [columnForm, setDisplay] = useState(false);
   const [columns, setColumns] = useState<ColumnType[]>([]);
 
+  const [isConnected, setIsConnected] = useState(false);
+  // const [sockets, setSockets] = useState<any>(null);
+
   const newColName = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -26,11 +30,16 @@ function Board({ board }: any) {
   }, []);
 
   useEffect(() => {
-    const socket = io(`${PORT}`);
+    socket.on('connect', () => setIsConnected(true));
+    socket.on('disconnect', () => setIsConnected(false));
+
     return () => {
-      socket.disconnect();
+      socket.off('connect', () => setIsConnected(true));
+      socket.off('connect', () => setIsConnected(false));
     };
   }, []);
+
+  const emitBoardUpdates = () => {};
 
   const fetcher = async (allCols: any) => {
     const boardId = board.id;

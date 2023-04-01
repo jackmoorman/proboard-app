@@ -8,6 +8,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
+    "rb-image-dev": "docker build -t proboard/nextjs-image -f Dockerfile-dev .",
     "docker-dev": "docker-compose -f docker-compose-dev.yml up",
     "docker-stop": "docker-compose -f docker-compose-dev.yml stop",
     "docker-dev-d": "docker-compose -f docker-compose-dev.yml up -d --build --force-recreate",

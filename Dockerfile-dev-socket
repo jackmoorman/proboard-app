@@ -1,0 +1,12 @@
+FROM node:18.15
+
+RUN npm install -g nodemon
+
+WORKDIR /app
+
+COPY ./server .
+
+RUN npm install socket.io
+RUN npm install socket.io-client
+
+EXPOSE 3500
