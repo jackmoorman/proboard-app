@@ -5,6 +5,9 @@ import { useState, useRef, useEffect } from 'react';
 import { createColumn, createCard } from './columnHelper';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { reorderCards, reorderColumns } from './reorder';
+import { io } from 'socket.io-client';
+
+const PORT = process.env.SOCKETIO_URL;
 
 type ColumnType = {
   id: string;
@@ -20,6 +23,13 @@ function Board({ board }: any) {
 
   useEffect(() => {
     setColumns([...board.data]);
+  }, []);
+
+  useEffect(() => {
+    const socket = io(`${PORT}`);
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const fetcher = async (allCols: any) => {
@@ -78,18 +88,20 @@ function Board({ board }: any) {
   };
 
   const handleDragEnd = async (result: any) => {
-    console.log(result);
     if (!result) return;
     if (!result.destination) return;
-    let allCols: any;
+    let allCols: any = [...columns];
     if (result.type === 'card') {
       allCols = reorderCards(result, columns);
       setColumns([...allCols]);
+      fetcher(allCols);
     }
     if (result.type === 'column') {
       allCols = reorderColumns(result, columns);
       setColumns([...allCols]);
+      fetcher(allCols);
     }
+    return;
   };
 
   return (

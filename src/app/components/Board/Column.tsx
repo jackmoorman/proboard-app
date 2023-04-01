@@ -70,16 +70,14 @@ function Column({
     setCardForm(false);
   };
 
-  console.log(column.id);
-
   return (
-    <Draggable draggableId={column.id} index={index}>
+    <Draggable key={column.id} draggableId={column.id} index={index}>
       {(provided) => (
         <div
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className="w-72 p-3 m-2 shadow-column rounded"
+          className="flex flex-col w-72 p-3 m-2 shadow-column rounded"
         >
           <div className="flex justify-between items-center">
             {!editColumn ? (
@@ -140,12 +138,12 @@ function Column({
             ) : null}
           </div>
           <hr className="border border-neutral-300 mt-3 mb-2" />
-          <Droppable droppableId={column.id.toString()} type="card">
+          <Droppable droppableId={column.id} type="card">
             {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex flex-col gap-3"
+                className="grow flex flex-col gap-3 border"
               >
                 {cards.map(({ id, status, value }: any, index: number) => {
                   return (

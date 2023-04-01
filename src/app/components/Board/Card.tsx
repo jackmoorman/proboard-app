@@ -13,7 +13,7 @@ type CardProps = {
 
 function Card({ id, columnId, index, status, value, deleteCard }: CardProps) {
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable key={id} draggableId={id} index={index}>
       {(provided) => (
         <div
           {...provided.draggableProps}
