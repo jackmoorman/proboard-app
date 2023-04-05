@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  proboard-prod:
+    image: proboard/nextjs-prod
+    container_name: proboard-prod
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+      - ./node_modules:/app/node_modules
+    command: sh -c "npx prisma generate && npm  npm run start"

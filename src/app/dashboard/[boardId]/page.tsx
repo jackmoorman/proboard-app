@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import Board from '@/app/components/Board/Board';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const getBoardData = async (id: string) => {
   try {
@@ -20,6 +22,9 @@ const getBoardData = async (id: string) => {
 async function BoardPage({ params }: any) {
   const board = await getBoardData(params.boardId);
   const { title } = board;
+  const session = await getServerSession(authOptions);
+  // console.log(session);
+
   return (
     <main className="grow flex flex-col p-3">
       <nav className="flex justify-between items-center pl-6 pr-6">
@@ -32,7 +37,7 @@ async function BoardPage({ params }: any) {
         </Link>
       </nav>
       <hr className="border border-neutral-300 m-2" />
-      <Board board={board} />
+      <Board board={board} uid={session.user.id} />
     </main>
   );
 }

@@ -5,10 +5,10 @@ import { useState, useRef, useEffect } from 'react';
 import { createColumn, createCard } from './columnHelper';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { reorderCards, reorderColumns } from './reorder';
-import { io } from 'socket.io-client';
+
+const socket = new WebSocket('ws://localhost:3005');
 
 const PORT = process.env.SOCKETIO_URL;
-const socket = io('http://localhost:3500');
 
 type ColumnType = {
   id: string;
@@ -16,30 +16,65 @@ type ColumnType = {
   cards: any;
 };
 
-function Board({ board }: any) {
+function Board({ board, uid }: any) {
   const [columnForm, setDisplay] = useState(false);
   const [columns, setColumns] = useState<ColumnType[]>([]);
-
-  const [isConnected, setIsConnected] = useState(false);
-  // const [sockets, setSockets] = useState<any>(null);
 
   const newColName = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setColumns([...board.data]);
-  }, []);
+    const userData = {
+      boardId: board.id,
+      userId: uid,
+      method: 'join',
+    };
 
-  useEffect(() => {
-    socket.on('connect', () => setIsConnected(true));
-    socket.on('disconnect', () => setIsConnected(false));
+    socket.send(JSON.stringify(userData));
 
     return () => {
-      socket.off('connect', () => setIsConnected(true));
-      socket.off('connect', () => setIsConnected(false));
+      console.log('reached return');
+      const userData = {
+        boardId: board.id,
+        userId: uid,
+        method: 'leave',
+      };
+      socket.send(JSON.stringify(userData));
     };
   }, []);
 
-  const emitBoardUpdates = () => {};
+  const emitBoardUpdates = (allCols: any) => {
+    console.log(socket.readyState);
+    const msg = {
+      boardId: board.id,
+      userId: uid,
+      method: 'update',
+      columns: allCols,
+    };
+
+    socket.send(JSON.stringify(msg));
+  };
+
+  // socket.onopen = (event) => {
+  //   console.log('opened');
+  //   console.log(event);
+  //   const userData = {
+  //     boardId: board.id,
+  //     userId: uid,
+  //     method: 'join',
+  //   };
+  //   socket.send(JSON.stringify(userData));
+  // };
+
+  socket.onmessage = (event) => {
+    // console.log('RECEIVED: ', JSON.parse(event.data));
+    const receivedData = JSON.parse(event.data);
+    setColumns([...receivedData.columns]);
+  };
+
+  // socket.onclose = (event) => {
+  //   console.log('closed');
+  // };
 
   const fetcher = async (allCols: any) => {
     const boardId = board.id;
@@ -104,11 +139,13 @@ function Board({ board }: any) {
       allCols = reorderCards(result, columns);
       setColumns([...allCols]);
       fetcher(allCols);
+      emitBoardUpdates(allCols);
     }
     if (result.type === 'column') {
       allCols = reorderColumns(result, columns);
       setColumns([...allCols]);
       fetcher(allCols);
+      emitBoardUpdates(allCols);
     }
     return;
   };
