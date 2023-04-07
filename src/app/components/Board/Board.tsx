@@ -6,9 +6,12 @@ import { createColumn, createCard } from './columnHelper';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { reorderCards, reorderColumns } from './reorder';
 
-const socket = new WebSocket('ws://localhost:3005');
+//@ts-nocheck
 
-const PORT = process.env.SOCKETIO_URL;
+console.log('ENVS: ', process.env);
+console.log('WSPORT: ', process.env.WSPORT);
+
+const socket = new WebSocket('ws://localhost:3005');
 
 type ColumnType = {
   id: string;
