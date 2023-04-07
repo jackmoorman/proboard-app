@@ -1,16 +1,14 @@
 'use client';
 import React from 'react';
 import { useState, useRef } from 'react';
-import useSWR from 'swr';
 import { useSession } from 'next-auth/react';
 
 type Props = {};
 
 function CreateProject({}: Props) {
-  const [formDisplay, setDisplay] = useState(true);
+  const [formDisplay, setDisplay] = useState(false);
   const projectTitle = useRef<HTMLInputElement>(null);
   const { data: session } = useSession();
-  console.log(session);
 
   const submitProject = async (e: any) => {
     e.preventDefault();

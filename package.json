@@ -4,10 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "docker-dev": "docker-compose -f docker-compose-dev.yml up"
+    "db": "docker run --rm --name postgres-prod -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=proboardDB postgres",
+    "rb-image-dev": "docker build -t proboard/nextjs-image -f Dockerfile-dev .",
+    "docker-dev": "docker-compose -f docker-compose-dev.yml up",
+    "docker-prod": "docker-compose up",
+    "docker-stop": "docker-compose -f docker-compose-dev.yml stop",
+    "docker-dev-d": "docker-compose -f docker-compose-dev.yml up -d --build --force-recreate",
+    "docker-rb": "docker-compose -f docker-compose-dev.yml up --build --force-recreate"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -19,19 +25,20 @@
     "@prisma/client": "^4.12.0",
     "@types/node": "18.15.8",
     "@types/react": "18.0.29",
+    "@types/react-beautiful-dnd": "^13.1.4",
     "@types/react-dom": "18.0.11",
-    "eslint": "8.36.0",
-    "eslint-config-next": "13.2.4",
+    "express": "^4.18.2",
     "next": "13.2.4",
     "next-auth": "^4.20.1",
     "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
-    "swr": "^2.1.1",
     "typescript": "5.0.2",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
+    "nodemon": "^2.0.22",
     "postcss": "^8.4.21",
     "prisma": "^4.12.0",
     "tailwindcss": "^3.2.7",
