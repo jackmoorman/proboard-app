@@ -56,3 +56,39 @@ export async function PUT(request: Request) {
     throw new Error(`Error editing columns: ${err}`);
   }
 }
+
+export async function PATCH(request: Request) {
+  const req = await request.json();
+  const { boardId, userId } = req;
+  try {
+    const updated = await prisma.board.update({
+      where: {
+        id: boardId,
+      },
+      data: {
+        users: {
+          disconnect: [{ id: userId }],
+        },
+      },
+    });
+    return NextResponse.json('Successfully removed user');
+  } catch (err) {
+    throw new Error(`Error removing user: ${err}`);
+  }
+}
+
+export async function DELETE(request: Request) {
+  const req = await request.json();
+  console.log(req);
+  const { boardId } = req;
+  try {
+    const deleted = await prisma.board.delete({
+      where: {
+        id: boardId,
+      },
+    });
+    return NextResponse.json('Successfully deleted board');
+  } catch (err) {
+    throw new Error(`Error deleting board: ${err}`);
+  }
+}

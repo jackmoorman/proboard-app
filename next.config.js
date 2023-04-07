@@ -4,6 +4,7 @@ const nextConfig = {
     appDir: true,
     serverComponentsExternalPackages: ['@prisma/client'],
   },
+  output: 'standalone',
 };
 
 module.exports = nextConfig;

@@ -1,12 +1,19 @@
 version: '3.8'
 
 services:
-  proboard-prod:
-    image: proboard/nextjs-prod
-    container_name: proboard-prod
+  postgres-prod:
+    image: postgres:15.2
+    container_name: postgres-prod
+    hostname: postgres
     ports:
-      - 3000:3000
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: proboardDB
     volumes:
-      - .:/app
-      - ./node_modules:/app/node_modules
-    command: sh -c "npx prisma generate && npm  npm run start"
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
