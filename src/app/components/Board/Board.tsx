@@ -6,13 +6,6 @@ import { createColumn, createCard } from './columnHelper';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { reorderCards, reorderColumns } from './reorder';
 
-//@ts-nocheck
-
-console.log('ENVS: ', process.env);
-console.log('WSPORT: ', process.env.WSPORT);
-
-const socket = new WebSocket('ws://localhost:3005');
-
 type ColumnType = {
   id: string;
   title: string | undefined;
@@ -22,27 +15,38 @@ type ColumnType = {
 function Board({ board, uid }: any) {
   const [columnForm, setDisplay] = useState(false);
   const [columns, setColumns] = useState<ColumnType[]>([]);
+  const [socket, setSocket] = useState<any>(null);
 
   const newColName = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setColumns([...board.data]);
-    const userData = {
-      boardId: board.id,
-      userId: uid,
-      method: 'join',
+    //@ts-expect-error
+    const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
+    setSocket(ws);
+
+    ws.onopen = (event: any) => {
+      const userData = {
+        boardId: board.id,
+        userId: uid,
+        method: 'join',
+      };
+      ws.send(JSON.stringify(userData));
     };
 
-    socket.send(JSON.stringify(userData));
+    ws.onmessage = (event: any) => {
+      const receivedData = JSON.parse(event.data);
+      setColumns([...receivedData.columns]);
+    };
 
     return () => {
-      console.log('reached return');
       const userData = {
         boardId: board.id,
         userId: uid,
         method: 'leave',
       };
-      socket.send(JSON.stringify(userData));
+      ws.send(JSON.stringify(userData));
+      ws.close();
     };
   }, []);
 
@@ -57,27 +61,6 @@ function Board({ board, uid }: any) {
 
     socket.send(JSON.stringify(msg));
   };
-
-  // socket.onopen = (event) => {
-  //   console.log('opened');
-  //   console.log(event);
-  //   const userData = {
-  //     boardId: board.id,
-  //     userId: uid,
-  //     method: 'join',
-  //   };
-  //   socket.send(JSON.stringify(userData));
-  // };
-
-  socket.onmessage = (event) => {
-    // console.log('RECEIVED: ', JSON.parse(event.data));
-    const receivedData = JSON.parse(event.data);
-    setColumns([...receivedData.columns]);
-  };
-
-  // socket.onclose = (event) => {
-  //   console.log('closed');
-  // };
 
   const fetcher = async (allCols: any) => {
     const boardId = board.id;
@@ -96,12 +79,10 @@ function Board({ board, uid }: any) {
 
   const addColumn = async (e: any) => {
     e.preventDefault();
-    const boardId = board.id;
     const title = newColName?.current?.value;
     const newCol = createColumn(title);
     const allCols = [...columns, newCol];
     setColumns([...allCols]);
-
     fetcher(allCols);
   };
 
@@ -111,7 +92,6 @@ function Board({ board, uid }: any) {
     index: number
   ) => {
     const allCols = [...columns];
-    const boardId = board.id;
     for (let i = 0; i < columns.length; i++) {
       if (columns[i].id === columnId) {
         console.log(columns[i].title);
