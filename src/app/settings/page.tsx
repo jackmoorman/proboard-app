@@ -15,6 +15,13 @@ type Board = {
 
 export default async function page({}: Props) {
   const session = await getServerSession(authOptions);
+  if (!session) {
+    return (
+      <div>
+        <h1>You must be signed in to view your settings.</h1>
+      </div>
+    );
+  }
   const userData = (await prisma.user.findUnique({
     where: {
       id: session.user.id,

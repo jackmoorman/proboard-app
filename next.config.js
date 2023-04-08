@@ -5,9 +5,16 @@ const nextConfig = {
     serverComponentsExternalPackages: ['@prisma/client'],
   },
   output: 'standalone',
-  // env: {
-  //   WS_URL: process.env.WS_URL,
-  // },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.googleusercontent.com',
+        port: '',
+        pathname: '/**/*',
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

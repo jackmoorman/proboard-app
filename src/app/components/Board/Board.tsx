@@ -51,7 +51,6 @@ function Board({ board, uid }: any) {
   }, []);
 
   const emitBoardUpdates = (allCols: any) => {
-    console.log(socket.readyState);
     const msg = {
       boardId: board.id,
       userId: uid,
@@ -59,7 +58,11 @@ function Board({ board, uid }: any) {
       columns: allCols,
     };
 
-    socket.send(JSON.stringify(msg));
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(msg));
+    } else {
+      return console.log('Socket not open');
+    }
   };
 
   const fetcher = async (allCols: any) => {
@@ -134,7 +137,7 @@ function Board({ board, uid }: any) {
   };
 
   return (
-    <section className="grow flex flex-col items-start p-3 pb-0 gap-3">
+    <section className="fade-and-translate-up grow w-full flex flex-col items-start p-3 pb-0 gap-3 relative">
       <div className="flex gap-3 justify-start items-center">
         <button
           onClick={() => setDisplay((prev) => !prev)}
@@ -165,7 +168,7 @@ function Board({ board, uid }: any) {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="grow w-full flex flex-start overflow-y-auto"
+              className="grow flex flex-start overflow-x-auto"
             >
               {columns.map((column: any, index: number) => {
                 return (

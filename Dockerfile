@@ -1,20 +1,5 @@
-# FROM node:18.15
-
-# WORKDIR /app
-
-# COPY package*.json ./
-
-# RUN npm install
-
-# COPY . .
-
-# RUN npx prisma generate
-# RUN npx prisma generate
-# # RUN npm run build
-
-# EXPOSE 3000
-
-# CMD ["node", "server.js"]
+# NOTE: This production Dockerfile is from the Next.js documentation:
+# https://nextjs.org/docs/deployment#docker-image
 
 FROM node:18-alpine AS base
 
@@ -33,7 +18,6 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
@@ -45,11 +29,9 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-# RUN yarn build
-
-# If using npm comment out above and use below instead
+# Generate the Prisma Client at build time.
 RUN npx prisma generate
-# RUN npx prisma migrate dev --name init
+# Build the app
 RUN npm run build
 
 # Production image, copy all the files and run next

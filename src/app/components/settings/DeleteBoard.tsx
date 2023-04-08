@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 function DeleteBoard({ boardInfo, user }: any) {
+  const router = useRouter();
+
   const leaveOrDeleteBoard = async () => {
     if (boardInfo.adminId === user.id) {
       const res = await fetch('/api/board', {
@@ -14,10 +16,20 @@ function DeleteBoard({ boardInfo, user }: any) {
       });
       console.log(res);
       if (res.status === 200 && res.ok === true) {
-        redirect('/settings');
+        router.push('/settings');
       }
     } else {
-      return;
+      const res = await fetch('/api/board/user/remove', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'Application/JSON' },
+        body: JSON.stringify({
+          boardId: boardInfo.id,
+          userId: user.id,
+        }),
+      });
+      if (res.status === 200 && res.ok === true) {
+        router.push('/settings');
+      }
     }
   };
 

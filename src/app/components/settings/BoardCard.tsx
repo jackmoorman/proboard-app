@@ -16,8 +16,8 @@ function Project({ board }: Props) {
   const { id, title, adminId, data } = board;
 
   return (
-    <div className="w-full min-w-min max-w-md shadow-md flex justify-between items-start p-3 bg-neutral-100 rounded-md">
-      <div className="flex flex-col">
+    <div className="w-full min-w-min max-w-md h-28 shadow-md flex justify-between items-start p-3 bg-neutral-100 rounded-md">
+      <div className="grow h-full flex flex-col justify-between">
         <h1 className="text-2xl">{title}</h1>
         <p>
           <span className="font-medium">ID:</span> {id}
