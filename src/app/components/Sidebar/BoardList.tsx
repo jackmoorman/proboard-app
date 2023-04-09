@@ -12,24 +12,20 @@ function BoardList({ boards }: any): any {
           <div
             key={index}
             id={board.id}
-            className="w-full shadow-md flex justify-between items-center p-3 bg-neutral-100 rounded-md"
+            className="w-full shadow-md flex justify-between items-center p-3 bg-neutral-100 rounded-md hover:scale-105 hover:bg-neutral-300 transition-all"
           >
             <Link href={`/dashboard/${board.id}`}>
-              <p className=" text-xl overflow-hidden grow">{board.title}</p>
+              <p className=" text-xl overflow-hidden grow cursor-pointer">
+                {board.title}
+              </p>
             </Link>
             <div className="flex gap-2 justify-end items-center">
-              <button
-                id={board.id}
+              <Link
+                href={`/settings/${board.id}`}
                 className=" h-4 w-4 flex justify-center items-center"
               >
                 <FontAwesomeIcon icon={faEdit} />
-              </button>
-              <button
-                id={board.id}
-                className=" text-4xl rotate-45 flex justify-center items-center"
-              >
-                +
-              </button>
+              </Link>
             </div>
           </div>
         );

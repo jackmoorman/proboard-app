@@ -13,8 +13,8 @@ function Header({}: Props) {
         </Link>
       </h1>
       <nav className="flex justify-between items-center gap-7">
-        <Link className="hover:scale-105 transition-all" href="/about">
-          About
+        <Link className="hover:scale-105 transition-all" href="/settings">
+          Settings
         </Link>
         <Link className="hover:scale-105 transition-all" href="/dashboard">
           Dashboard

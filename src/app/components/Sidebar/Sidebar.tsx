@@ -34,7 +34,6 @@ async function Sidebar() {
       <hr className=" border-slate-800 w-full" />
       <CreateProject />
       {!boards ? "You don't have any projects." : <BoardList boards={boards} />}
-      {/* <BoardList boards={boards} /> */}
     </section>
   );
 }
