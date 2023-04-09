@@ -16,6 +16,7 @@ function DeleteBoard({ boardInfo, user }: any) {
       });
       console.log(res);
       if (res.status === 200 && res.ok === true) {
+        router.refresh();
         router.push('/settings');
       }
     } else {
