@@ -4,7 +4,80 @@
 @tailwind components;
 @tailwind utilities;
 
-*, html, body {
+*,
+html,
+body {
   font-family: 'Rajdhani', sans-serif;
   font-weight: normal;
+}
+
+:root {
+  --load-time: 0.5s;
+}
+
+.translate-up {
+  animation: translate-up var(--load-time) ease-in-out;
+}
+
+.translate-down {
+  animation: translate-down var(--load-time) ease-in-out;
+}
+
+.translate-left {
+  animation: translate-left var(--load-time) ease-in-out;
+}
+
+.fade-in {
+  animation: fade-in var(--load-time) ease-in-out;
+}
+
+.fade-and-translate-up {
+  animation: fade-and-translate-up var(--load-time) ease-in-out;
+}
+
+@keyframes translate-up {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes translate-down {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes translate-left {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-and-translate-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

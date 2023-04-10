@@ -25,6 +25,7 @@ export async function POST(request: Request) {
             cards: [
               {
                 id: uuid(),
+                status: 'Unassigned',
                 value: 'My first card.',
               },
             ],
@@ -32,9 +33,42 @@ export async function POST(request: Request) {
         ],
       },
     });
-    console.log(newBoard);
     return NextResponse.json('Successfully created project.');
   } catch (err) {
     throw new Error(`Error creating project: ${err}`);
+  }
+}
+
+export async function PUT(request: Request) {
+  const req = await request.json();
+  const { boardId, allCols } = req;
+  try {
+    const updated = await prisma.board.update({
+      where: {
+        id: boardId,
+      },
+      data: {
+        data: allCols,
+      },
+    });
+    return NextResponse.json('Successfully updated board');
+  } catch (err) {
+    throw new Error(`Error editing columns: ${err}`);
+  }
+}
+
+export async function DELETE(request: Request) {
+  const req = await request.json();
+  console.log(req);
+  const { boardId } = req;
+  try {
+    const deleted = await prisma.board.delete({
+      where: {
+        id: boardId,
+      },
+    });
+    return NextResponse.json('Successfully deleted board');
+  } catch (err) {
+    throw new Error(`Error deleting board: ${err}`);
   }
 }
