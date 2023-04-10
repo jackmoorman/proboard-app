@@ -7,7 +7,6 @@ type Props = {};
 
 function LoginHeader({}: Props) {
   const { data: session } = useSession();
-  console.log(session);
 
   const imgSrc = session?.user?.image || '/vercel.svg';
 

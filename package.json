@@ -7,13 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db-void": "docker run --rm --name postgres-prod -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=proboardDB postgres",
     "db": "docker-compose up",
     "rb-image-dev": "docker build -t proboard/nextjs-image -f Dockerfile-dev .",
     "docker-dev": "docker-compose -f docker-compose-dev.yml up",
-    "docker-prod": "docker-compose up",
+    "docker-prod": "docker run --rm --name proboard-prod -p 3000:3000 proboard/nextjs-prod",
     "docker-stop": "docker-compose -f docker-compose-dev.yml stop",
-    "docker-dev-d": "docker-compose -f docker-compose-dev.yml up -d --build --force-recreate",
     "docker-rb": "docker-compose -f docker-compose-dev.yml up --build --force-recreate"
   },
   "prisma": {
@@ -34,6 +32,7 @@
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
+    "sharp": "^0.32.0",
     "typescript": "5.0.2",
     "uuidv4": "^6.2.13"
   },
