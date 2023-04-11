@@ -21,8 +21,10 @@ function Board({ board, uid }: any) {
 
   useEffect(() => {
     setColumns([...board.data]);
+    console.log('Trying to connect to WS Server...');
     //@ts-expect-error
     const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
+    if (ws.readyState === WebSocket.CONNECTING) console.log('Connecting...');
     setSocket(ws);
 
     ws.onopen = (event: any) => {
@@ -40,13 +42,15 @@ function Board({ board, uid }: any) {
     };
 
     return () => {
-      const userData = {
-        boardId: board.id,
-        userId: uid,
-        method: 'leave',
-      };
-      ws.send(JSON.stringify(userData));
-      ws.close();
+      if (ws.readyState === WebSocket.OPEN) {
+        const userData = {
+          boardId: board.id,
+          userId: uid,
+          method: 'leave',
+        };
+        ws.send(JSON.stringify(userData));
+        ws.close();
+      }
     };
   }, []);
 
