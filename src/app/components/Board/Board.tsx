@@ -22,10 +22,17 @@ function Board({ board, uid }: any) {
   useEffect(() => {
     setColumns([...board.data]);
     console.log('Trying to connect to WS Server...');
-    //@ts-expect-error
-    const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
+    const ws = new WebSocket('wss://proboard-wss-production.up.railway.app');
     if (ws.readyState === WebSocket.CONNECTING) console.log('Connecting...');
     setSocket(ws);
+
+    // ws.addEventListener('connection', (e) => console.log(e));
+
+    // ws.addEventListener('close', (e) => console.log(e));
+    // ws.addEventListener('error', (e) => console.log(e));
+
+    // console.log(process);
+    // console.log(ws);
 
     ws.onopen = (event: any) => {
       const userData = {
