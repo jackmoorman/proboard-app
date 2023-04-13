@@ -5,7 +5,6 @@ import Link from 'next/link';
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  // console.log(session);
 
   return (
     <main className="fade-in grow flex flex-col text-xl items-center pt-14 w-full max-w-screen-2xl">

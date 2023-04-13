@@ -21,9 +21,18 @@ function Board({ board, uid }: any) {
 
   useEffect(() => {
     setColumns([...board.data]);
-    //@ts-expect-error
-    const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
+    console.log('Trying to connect to WS Server...');
+    const ws = new WebSocket('wss://proboard-wss-production.up.railway.app');
+    if (ws.readyState === WebSocket.CONNECTING) console.log('Connecting...');
     setSocket(ws);
+
+    // ws.addEventListener('connection', (e) => console.log(e));
+
+    // ws.addEventListener('close', (e) => console.log(e));
+    // ws.addEventListener('error', (e) => console.log(e));
+
+    // console.log(process);
+    // console.log(ws);
 
     ws.onopen = (event: any) => {
       const userData = {
@@ -40,13 +49,15 @@ function Board({ board, uid }: any) {
     };
 
     return () => {
-      const userData = {
-        boardId: board.id,
-        userId: uid,
-        method: 'leave',
-      };
-      ws.send(JSON.stringify(userData));
-      ws.close();
+      if (ws.readyState === WebSocket.OPEN) {
+        const userData = {
+          boardId: board.id,
+          userId: uid,
+          method: 'leave',
+        };
+        ws.send(JSON.stringify(userData));
+        ws.close();
+      }
     };
   }, []);
 

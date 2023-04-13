@@ -7,8 +7,8 @@ type Props = {
   children: React.ReactNode;
 };
 
-function DashLayout({ children }: Props): JSX.Element {
-  const session = getServerSession(authOptions);
+async function DashLayout({ children }: Props) {
+  const session = await getServerSession(authOptions);
 
   return (
     <main className=" h-full w-full flex relative">
